@@ -18,11 +18,10 @@
 
 </template>
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import Dialog from './components/Dialog.vue'
 
 const root = ref(null)
-const dialogVisible = ref(false)
 
 const updateProject = () => {
 	root.value.show()
