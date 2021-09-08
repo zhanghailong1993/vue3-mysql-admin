@@ -19,6 +19,7 @@
 
 <script setup>
 import { ref, reactive } from 'vue'
+import * as api from '@/api'
 
 const ruleRef = ref(null)
 const params = reactive({
@@ -41,8 +42,9 @@ const rules = ref({
   ]
 })
 
-const loginHandler = () => {
-  alert('提交')
+const loginHandler = async () => {
+  const data = await api.login.login(params)
+  console.log(data)
 }
 
 const login = () => {

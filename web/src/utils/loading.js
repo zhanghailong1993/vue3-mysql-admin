@@ -10,6 +10,7 @@ export default class {
     this.startTime = Date.now()
   }
   start () {
+    const now = Date.now()
     if (NProgress.isStarted()) return
     this.startTime = now
     if (this.timer) clearTimeout(this.timer)
@@ -21,6 +22,7 @@ export default class {
     }, this.delay)
   }
   done () {
+    const now = Date.now()
     // 小于设定的延迟时间，直接清除定时器不开启加载提示条
     if (NProgress.isStarted()) {
       NProgress.done()
