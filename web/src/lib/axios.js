@@ -1,5 +1,5 @@
 import axios from 'axios'
-
+// https://www.itying.com/koa/article-index-id-88.html
 const isFunction = t => typeof t === 'function'
 
 const TIMEOUT = 20 * 1e3 // 超时时间20s
@@ -8,7 +8,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 axios.install = (app, options = {}) => {
   console.log(app)
-  const { baseURL = '/', interceptors, responseHandler, setLoading = {} } = options
+  const { interceptors, responseHandler, setLoading = {} } = options
 
   if (interceptors) {
     axios.interceptors.request.use(config => interceptors(config))
@@ -20,8 +20,10 @@ axios.install = (app, options = {}) => {
   }, error => {
     return Promise.reject(error)
   })
-
-  axios.defaults.baseURL = baseURL
+  
+  if (process.env.VUE_APP_API_URL) {
+    axios.defaults.baseURL = process.env.VUE_APP_API_URL
+  }
 
   axios.defaults.withCredentials = true
 
