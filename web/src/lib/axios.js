@@ -8,7 +8,7 @@ axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded
 
 axios.install = (app, options = {}) => {
   console.log(app)
-  const { interceptors, responseHandler, setLoading = {} } = options
+  const { interceptors, responseHandler, setLoading = {}, errorHandler } = options
 
   if (interceptors) {
     axios.interceptors.request.use(config => interceptors(config))
@@ -41,9 +41,14 @@ axios.install = (app, options = {}) => {
         // 请求结束之后关闭loading
         loadingField && setLoading(loadingField, false)
       }, error => {
+        
         // 请求结束之后关闭loading
         loadingField && setLoading(loadingField, false)
-        reject(error)
+        if (isFunction(errorHandler)) {
+          errorHandler(error)
+        } else {
+          reject(error)
+        }
       })
     })
   }
@@ -64,6 +69,20 @@ axios.install = (app, options = {}) => {
     params,
     options
   })
+}
+
+export const httpErrorMessage = {
+  400: '请求错误',
+  401: '未授权，请登录',
+  403: '拒绝访问',
+  404: '请求地址出错',
+  408: '请求超时',
+  500: '服务器内部错误',
+  501: '服务未实现',
+  502: '网关错误',
+  503: '服务不可用',
+  504: '网关超时',
+  505: 'HTTP版本不受支持'
 }
 
 export default axios

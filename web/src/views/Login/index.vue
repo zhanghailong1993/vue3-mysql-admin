@@ -1,13 +1,13 @@
 <template>
   <section class="login">
     <div class="login-section">
-      <h2>Don's Blog 后台管理系统</h2>
-      <el-form ref="ruleRef" :model="params" :rules="rules" label-width="120px">
+      <h2>Don's 后台管理系统</h2>
+      <el-form ref="ruleRef" :model="params" :rules="rules" label-width="70px">
         <el-form-item prop="username" label="用户名">
-          <el-input v-model="params.username" clearable placeholder="用户名" />
+          <el-input name="new-username" autocomplete="off" v-model="params.username" clearable placeholder="用户名" />
         </el-form-item>
         <el-form-item prop="password" label="密码">
-          <el-input v-model="params.password" clearable type="password" placeholder="密码" />
+          <el-input autocomplete="new-password" v-model="params.password" clearable type="password" placeholder="密码" />
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="login">登录</el-button>
@@ -56,3 +56,64 @@ const login = () => {
 }
 
 </script>
+<style lang="less" scoped>
+@base-color: #2d8cf0;
+
+.login {
+  position: relative;
+  height: 100vh;
+  background-color: #324057;
+  .login-section {
+    position: absolute;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -54%);
+    /deep/ .el-form-item__label {
+      color: #fff;
+    }
+  }
+  h2 {
+    font-size: 2.5em;
+    color: #fff;
+    text-align: center;
+    margin-bottom: 1.5em;
+  }
+  .login-form {
+    padding: 2em;
+    background-color: #fff;
+    border-radius: 0.2em;
+  }
+  .form-group {
+    margin-bottom: 1.5em;
+    input, button {
+      width: 100%;
+      font-size: 1em;
+      line-height: 2;
+      margin: 0;
+      padding: 0.6em 1em;
+      border: 1px solid #ddd;
+      border-radius: 4em;
+      box-sizing: border-box;
+      &:focus {
+        border-color: @base-color;
+      }
+    }
+    .btnLogin {
+      color: #fff;
+      cursor: pointer;
+      border-color: @base-color;
+      background-color: @base-color;
+    }
+  }
+  .error {
+    position: absolute;
+    left: 50%;
+    bottom: 1em;
+    transform: translateX(-50%);
+    font-size: 1em;
+    color: red;
+    text-align: center;
+  }
+}
+</style>
