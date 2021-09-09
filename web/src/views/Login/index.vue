@@ -20,6 +20,9 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import * as api from '@/api'
+import useElMessage from '@/useSetup/useElMessage.js'
+
+const { message } = useElMessage()
 
 const ruleRef = ref(null)
 const params = reactive({
@@ -42,9 +45,14 @@ const rules = ref({
   ]
 })
 
+
+
 const loginHandler = async () => {
-  const data = await api.login.login(params)
-  console.log(data)
+  const res = await api.login.login(params)
+  const { errcode = 0 } = res
+  if (errcode === 0) {
+    message('登录成功')
+  }
 }
 
 const login = () => {

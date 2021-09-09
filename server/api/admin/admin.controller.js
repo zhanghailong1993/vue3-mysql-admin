@@ -10,7 +10,24 @@ exports.login = async(ctx) => {
   }
   try {
     let results = await ctx.execSql(`SELECT id, hashedPassword, salt FROM user WHERE role='ADMIN' and userName = ?`, username)
-    console.log(results)
+    if (results.length > 0) {
+
+    } else {
+      const res = await ctx.execSql(`INSERT INTO user SET ?`, {
+        id: 32,
+        hashedPassword: password,
+        salt: '',
+        userName: username,
+        role: 'ADMIN'
+      })
+      if (res) {
+        ctx.body = {
+          errcode: 0,
+          success: true,
+          data: res
+        }
+      }
+    }
   } catch (error) {
     console.log(error)
     ctx.body = {
