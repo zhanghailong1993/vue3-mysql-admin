@@ -42,4 +42,9 @@ app.use(koajwt({ secret: config.tokenSecret }).unless({
 
 app.use(router.routes())
 
+app.on('error', err => {
+  log.error('server error', err)
+  ctx.redirect('/500.html')
+})
+
 app.listen(3333)

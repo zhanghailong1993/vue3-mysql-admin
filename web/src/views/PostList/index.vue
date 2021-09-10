@@ -1,10 +1,10 @@
 <template>
   <section class="post-table">
-    <el-table :data="tableData" style="width: 100%">
+    <el-table :loading="loading" :data="tableData" style="width: 100%">
       <el-table-column align="center" type="index" label="#"></el-table-column>
       <el-table-column align="center" prop="title" label="标题" width="180"> </el-table-column>
-      <el-table-column align="center" prop="name" label="分类" width="180"> </el-table-column>
-      <el-table-column align="center" prop="date" label="创建时间"> </el-table-column>
+      <el-table-column align="center" prop="categoryId" label="分类" width="180"> </el-table-column>
+      <el-table-column align="center" prop="createTime" label="创建时间"> </el-table-column>
       <el-table-column align="center" prop="status" label="状态"> </el-table-column>
       <el-table-column width="300" fixed="right" align="center" prop="operate" label="操作">
         <template #default>
@@ -28,31 +28,24 @@
   </section>
 </template>
 <script setup>
-  import { reactive } from 'vue'
-  const tableData = reactive([
-    {
-      title: '不告诉你',
-      date: '2016-05-02',
-      name: '王小虎',
-      status: '完成',
-    },
-    {
-      title: '不告诉你2',
-      date: '2016-09-02',
-      name: '王小军',
-      status: '完成'
-    },
-    {
-      title: '不告诉你3',
-      date: '2016-09-02',
-      name: '王小军军',
-      status: '完成'
-    },
-    {
-      title: '不告诉你4',
-      date: '2016-09-02',
-      name: '王小军军军',
-      status: '完成'
-    },
-  ])
+import { ref } from 'vue'
+import * as api from '@/api'
+
+let tableData = ref([])
+let loading = ref(false)
+
+const fetchData = async () => {
+  loading.value = true
+  const res = await api.post.getPostList({
+    page: 1,
+    limit: 10
+  }).finally(() => loading.value = false)
+  const { errcode, data = {}} = res
+  if (errcode === 0) {
+    const { list = [] } = data
+    tableData.value = list
+  }
+}
+fetchData()
+
 </script>
