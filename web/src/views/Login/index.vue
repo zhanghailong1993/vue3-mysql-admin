@@ -49,10 +49,12 @@ const rules = ref({
 
 const loginHandler = async () => {
   const res = await api.login.login(params)
-  const { errcode = 0 } = res
+  const { errcode = 0, data ={} } = res
   if (errcode === 0) {
+    const { token = '' } = data
     message.success('登录成功')
-    router.replace('/')
+    localStorage.setItem('DON_BLOG_TOKEN', token);
+    router.replace('/postlist')
   }
 }
 

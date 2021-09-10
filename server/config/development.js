@@ -7,5 +7,6 @@ module.exports = {
       database: 'mysql_demo',
       connectionLimit: 10
     }
-  }
+  },
+  tokenSecret: 'test'
 }

@@ -1,4 +1,7 @@
 const CryptoJS = require("crypto-js")
+const jwt = require('jsonwebtoken')
+const config = require('../../config/development.js')
+
 
 exports.login = async(ctx) => {
   const { username = '', password = '' } = ctx.request.body
@@ -16,10 +19,19 @@ exports.login = async(ctx) => {
       const hashedPassword = results[0].hashedPassword
       const hashPassword = CryptoJS.AES.decrypt(hashedPassword, ctx.salt).toString(CryptoJS.enc.Utf8)
       if (hashPassword === password) {
+        // 用户token
+        const userToken = {
+          name: username,
+          id: results[0].id
+        }
+        // 签发token
+        const token = jwt.sign(userToken, config.tokenSecret, { expiresIn: 60 * 60 })
         ctx.body = {
           errcode: 0,
           success: true,
-          token: '',
+          data: {
+            token
+          },
           message: ''
         }
       } else {

@@ -54,7 +54,7 @@ export default function axiosPlugin (app) {
             message: '登录已过期，点击确认刷新',
             type: 'error',
             onClose() {
-              window.location.reload()
+              location.href = location.origin + '/#/login'
             }
           })
           
