@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" class="btn-default btn-primary" @click="publishArticle">发布文章</el-button>
-        <el-button type="primary" class="btn-default">保存草稿</el-button>
+        <el-button type="primary" class="btn-default" @click="draftPost">保存草稿</el-button>
       </el-form-item>
     </el-form>
   </section>
@@ -27,11 +27,15 @@
 <script setup>
 import { ref, reactive } from 'vue'
 import * as api from '@/api'
+import { useRoute } from 'vue-router'
 import useElMessage from '@/useSetup/useElMessage.js'
+
+const route = useRoute()
 
 const categoryArr = ref([])
 const forms = ref(null)
-const post = reactive({
+
+let post = reactive({
   title: '',
   categoryId: '',
   newTag: '',
@@ -63,8 +67,11 @@ const rules = reactive({
 
 const { message } = useElMessage()
 
-const handleSubmit = async () => {
-  const res = await api.post.addPost(post)
+const handleSubmit = async (value = {}) => {
+  const res = await api.post.addPost({
+    ...post,
+    ...value
+  })
   const { errcode } = res
   if (errcode === 0) {
     message.success('发布成功')
@@ -79,6 +86,16 @@ const publishArticle = () => {
   })
 }
 
+const draftPost = () => {
+  forms.value.validate((err) => {
+    if (err) {
+      handleSubmit({
+        status: 'DRAFT'
+      })
+    }
+  })
+}
+
 
 const fetch = async () => {
   const res = await api.category.getCategories()
@@ -87,7 +104,23 @@ const fetch = async () => {
     categoryArr.value = data?.list ?? []
   }
 }
-
 fetch()
+
+const getPostById = async (id) => {
+  let res = await api.post.getPostById({
+    id
+  })
+  const { success } = res
+  if (success) {
+    // this.isFirtUpdatePostChange = true;
+    // this.isFirtUpdateTagsChange = true;
+    post = res?.post || {}
+    // this.tags = res.tags;
+  }
+}
+
+if (route.params.id) {
+  getPostById(route.params.id)
+}
 
 </script>

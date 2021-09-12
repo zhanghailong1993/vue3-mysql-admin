@@ -13,8 +13,9 @@ const routes = [
         component: () => import('../views/PostList/index.vue')
       },
       {
-        path: '/edit',
+        path: '/edit/:id?',
         name: 'Edit',
+        props: true,
         component: () => import('../views/Edit/index.vue')
       },
       {
